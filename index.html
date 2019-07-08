@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>eShop</title>
+  <link rel="stylesheet" href="minireset.min.css">
+  <style>
+    header {
+      position: relative;
+      padding: 0 20px;
+      margin-bottom: 20px;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+    }
+    .cart-button {
+      margin-left: auto;
+    }
+    .goods-list {
+      margin: 0 20px 0 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .goods-item {
+      display: flex;
+      flex-direction: column;
+      width: 200px;
+      border: 1px solid #cccccc;
+      margin-left: 20px;
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+    .goods-item h3 {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .add-goods-button {
+      margin-left: auto;
+    }
+    .goods-search {
+      display: flex;
+      width: 35%;
+    }
+    .search-input {
+      width: calc(100% - 100px);
+      margin-right: 20px;
+    }
+    .search-button {
+      width: 80px;
+    }
+    .goods-not-found {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cart {
+      padding: 20px;
+      position: absolute;
+      z-index: 99;
+      background-color: #fff;
+      width: 400px;
+      right: 20px;
+      top: 50px;
+      border: 1px solid #cccccc;
+      min-height: 300px;
+      box-shadow: 5px 5px 5px 0 rgba(0,0,0,.25);
+    }
+    .cart:after {
+      position: absolute;
+      top: -10px;
+      right: 20px;
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom:  10px solid #cccccc;
+    }
+    .close-button {
+      cursor: pointer;
+      -webkit-appearance: none;
+      background: transparent;
+      border: none;
+      position: absolute;
+      right: 15px;
+      top: 10px;
+    }
+    .preloader {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      background-color: #fff;
+    }
+    .error {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 200px;
+      z-index: 400;
+      padding: 10px;
+      background-color: #ffa2a8;
+      border: 1px solid #ff646b;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="preloader" v-if="isLoading">
+    <svg class="lds-spinner" width="200px"  height="200px"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: none;"><g transform="rotate(0 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.9166666666666666s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(30 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.8333333333333334s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(60 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.75s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(90 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.6666666666666666s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(120 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.5833333333333334s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(150 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.5s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(180 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.4166666666666667s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(210 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.3333333333333333s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(240 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.25s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(270 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.16666666666666666s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(300 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.08333333333333333s" repeatCount="indefinite"></animate>
+      </rect>
+    </g><g transform="rotate(330 50 50)">
+      <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#51CACC">
+        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="0s" repeatCount="indefinite"></animate>
+      </rect>
+    </g></svg>
+  </div>
+  <div class="error" v-if="errorMessage.length > 0">
+    {{errorMessage}}
+  </div>
+  <header>
+    <search @input="throttleFilter" v-model="searchLine"></search>
+    <button class="cart-button" @click="toggleCart">Корзина</button>
+    <cart ref="cart"></cart>
+  </header>
+  <main>
+    <goods-list :goods="filteredGoods" @add-to-cart="addToCart"></goods-list>
+  </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
